@@ -1,5 +1,6 @@
 body{
 background-color: beige;
+position: relative;
 }
 
 
@@ -16,5 +17,6 @@ background-color: beige;
 #bottom{
   position: relative;
   background-color: darkblue;
-  /*height: 150px;*/
+  top: 600px;
+  height: 100px;
 }
