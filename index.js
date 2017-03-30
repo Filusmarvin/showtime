@@ -1,62 +1,91 @@
-// var pageCounter = 1;
-// var animalContainer = document.getElementById("movie-info");
-// var btn = document.getElementById("btn");
+// what is the total budget of the ten most popular movies in the db?
 //
-// btn.addEventListener("click", function(){
-//   var ourRequest = new XMLHttpRequest();
-//   ourRequest.open('GET', 'https://learnwebcode.github.io/json-example/animals-' + pageCounter + '.json')
-//   ourRequest.onload = function() {
-//    var ourData = JSON.parse(ourRequest.responseText);
-//    renderHTML(ourData);
-//   };
-//   ourRequest.send();
-//   pageCounter++;
-//   if (pageCounter > 3) {
-//     btn.classList.add("hide-me");
-//   }
-// })
+// which genre has the highest average popularity for its top 25 movies?
 //
-// function renderHTML (data){
-//   var htmlString = ""
+// which of the top 25 horror movies have no spoken language besides English?
 //
-//   for (i = 0; i < data.length; i++){
-//     htmlString += "<p>" + data[i].name + " is a " + data[i].species + ".</p>";
-//   }
-//   animalContainer.insertAdjacentHTML('beforeend', htmlString)
-// }
-
-// var request = new
-// Request('https://api.github.com/users/andersontr15');
-// console.log(request.method)
+// who had the most starring roles in the top 25 comedies?
 //
-// fetch(request).then(function(response){
-//   return response;
-// }).then(function(json){
-//   console.log("JSON" :json);
-// });
+// how many movies have the stars of the most popular movie of last year appeared in? (list each star's name with the number of movies)
 
 
-function convertToJson (response) {
-      return response.json();
-    }
 
-    function logJson (json) {
-      console.log(json);
-    }
+function getData (url, params) {
+     let key = "81599007ff214265c13a0888da791d0c";
+     return fetch(`https://api.themoviedb.org/3/${url}?api_key=${key}&${params}`)
+       .then(response => response.json())
 
+   }
+   getData('movie/popular').then(json => console.log(json));
 
-    let firstPromise = fetch("https://api.themoviedb.org/3/search/movie?api_key=81599007ff214265c13a0888da791d0c&query=Jack+Reacher");
-    console.log('first promise', firstPromise);
-
-    let secondPromise = firstPromise.then(convertToJson);
-    console.log('second promise', secondPromise);
-
-    secondPromise.then(logJson);
-
-function getMovieInfo(data){
-  console.log(data.results[0].title);
-}
+   function getMovie (movieData) {
+     console.log('working with ', movieData.title);
+   }
+   getData('movie/popular').then(json => json.results.map(getMovie));
 
 
-fetch("https://api.themoviedb.org/3/search/movie?api_key=81599007ff214265c13a0888da791d0c&query=Jack+Reacher")
-.then( response => response.json()).then(getMovieInfo)
+
+
+
+   function getData (url, params) {
+     let key = "1922c66ebaed294ac65a15f52834a49b";
+     return fetch(`https://api.themoviedb.org/3/${url}?api_key=${key}&${params}`)
+       .then(response => response.json())
+
+   }
+   function getMovie (movieData) {
+     return getData(`movie/${movieData.id}`)
+   }
+   function combineBudget (total, movie) {
+     console.log('current movie budget', movie.budget);
+     return total + movie.budget;
+   }
+   function showCombinedBudget (movies) {
+     let allTheMonies = movies.reduce(combineBudget, 0);
+     console.log('these things cost ', allTheMonies);
+   }
+   getData('movie/popular')
+     .then(json => {
+       let topTen = json.results.slice(0, 10);
+       return topTen.map(getMovie)
+     })
+     .then(moviePromises => Promise.all(moviePromises))
+     .then(showCombinedBudget);
+
+
+     //
+
+     <script>
+   function getData (url, params) {
+     let key = "1922c66ebaed294ac65a15f52834a49b";
+     return fetch(`https://api.themoviedb.org/3/${url}?api_key=${key}&${params}`)
+       .then(response => response.json())
+
+   }
+   function getMovie (movieData) {
+     return getData(`movie/${movieData.id}`)
+   }
+   function combineBudget (total, movie) {
+     console.log('current movie budget', movie.budget);
+     return total + movie.budget;
+   }
+   function showCombinedBudget (movies) {
+     let allTheMonies = movies.reduce(combineBudget, 0);
+     console.log('these things cost ', allTheMonies);
+   }
+   getData('movie/popular')
+     .then(json => {
+       let topTen = json.results.slice(0, 10);
+       return topTen.map(getMovie)
+     })
+     .then(moviePromises => Promise.all(moviePromises))
+     .then(showCombinedBudget);
+
+   function getActorCredits (actor) {
+     console.log('working with ', actor.name);
+     return getData(`person/${actor.id}/movie_credits`)
+   }
+   getData('discover/movie', 'primary_release_year=2016')
+     .then(json => getData(`movie/${json.results[0].id}/credits`))
+     .then(json => json.cast.map(getActorCredits))
+     .then(wtf => console.log(wtf));
