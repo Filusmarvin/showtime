@@ -1,22 +1,19 @@
 body{
-background-color: ;
+background-color:;
 position: relative;
 }
 
 
   h1{
   text-align: center;
-  color: green;
+  color: ;
   width: 100%;
   }
 
-  .hide-me{
-  visibility: hidden;
+form {
+  margin-bottom:20px;
 }
 
-#bottom{
-  position: relative;
-  background-color: darkblue;
-  top: 600px;
-  height: 100px;
+.search{
+  width:400px;
 }
