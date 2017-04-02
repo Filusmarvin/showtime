@@ -42,16 +42,17 @@ function extraSpideyInfo (info) {
    spideyRelease.innerText = info.release_date
 }
 
-let textInput = document.getElementById('text-field').value;
-console.log(textInput)
+
+
 getData('search/movie',' spider man').then(json => json.results[0]).then(spiderMan);
 
 function handleFormSubmit(event) {
   if(event) {
     event.preventDefault()
   }
-  let textInput = document.getElementById('text-field').value;
+  var textInput = document.getElementById('text-field').value;
   console.log(textInput)
+  getData('search/movie',textInput).then(json => json.results[0]).then(spiderMan);
   return false;
 }
 
@@ -61,7 +62,7 @@ if (form.attachEvent) {
 } else {
     form.addEventListener("submit", handleFormSubmit);
 }
-console.log(textInput)
+
 
 // Question Number Two. which genre has the highest average popularity for its top 25 movies?
 // I know how to use the ID's.
